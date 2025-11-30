@@ -69,6 +69,7 @@ body {
     0 0 18px rgba(59, 130, 246, 0.45);
 }
 
+/* CTA antigua (por si la usas en otro lado) */
 .nav-cta {
   font-size: 0.8rem;
   text-transform: uppercase;
@@ -93,6 +94,89 @@ body {
   background: linear-gradient(135deg, #22c55e, #16a34a);
   border-color: transparent;
   color: #f9fafb;
+}
+
+/* === CONTACTO NAVBAR (WHATSAPP + INSTAGRAM) === */
+.nav-contact {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* Pill tipo botón (WhatsApp) */
+.nav-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid #22c55e;
+  background: rgba(0, 0, 0, 0.55);
+  color: #bbf7d0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 0 18px rgba(34, 197, 94, 0.35);
+  backdrop-filter: blur(8px);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-contact-btn:hover {
+  background: rgba(5, 46, 22, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(21, 128, 61, 0.9),
+    0 0 26px rgba(34, 197, 94, 0.7);
+  transform: translateY(-1px);
+}
+
+.nav-contact-icon-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #22c55e;
+  color: #052e16;
+  font-size: 0.8rem;
+}
+
+/* Icono solo de Instagram, mismo glow verde */
+.nav-contact-icon-only {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid #22c55e;
+  background: rgba(0, 0, 0, 0.55);
+  color: #bbf7d0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 0 18px rgba(34, 197, 94, 0.35);
+  backdrop-filter: blur(8px);
+  font-size: 1rem;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-contact-icon-only:hover {
+  background: rgba(5, 46, 22, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(21, 128, 61, 0.9),
+    0 0 26px rgba(34, 197, 94, 0.7);
+  transform: translateY(-1px);
 }
 
 /* botón hamburguesa – se ve solo en móvil (lo activamos en el media query) */
@@ -350,15 +434,53 @@ body {
   box-shadow: 0 0 10px rgba(45, 212, 191, 0.7);
 }
 
-/* ⭐ OPCIONAL: logo en esquina home
-.home-logo {
-  position: absolute;
-  left: 1.2rem;
-  bottom: 1.2rem;
-  width: 90px;
-  opacity: 0.9;
+/* BOTÓN CARRITO FLOTANTE */
+.btn-cart-floating {
+  position: relative;
+  padding: 0.7rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  background: rgba(15, 23, 42, 0.9);
+  color: #f9fafb;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(34, 197, 94, 0.4);
+  backdrop-filter: blur(10px);
+  transition:
+    transform 0.18s ease-out,
+    box-shadow 0.18s ease-out,
+    background 0.18s ease-out;
 }
-*/
+
+.btn-cart-floating:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.95),
+    0 0 16px rgba(34, 197, 94, 0.7);
+  background: rgba(6, 78, 59, 0.95);
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #facc15;
+  color: #111827;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px #020617;
+}
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
@@ -405,6 +527,20 @@ body {
 
   .hero-buttons {
     flex-direction: column;
+  }
+}
+
+/* Ajustes extra para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .nav-contact-btn {
+    padding: 0.3rem 0.9rem;
+    font-size: 0.65rem;
+  }
+
+  .nav-contact-icon-only {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
   }
 }
 

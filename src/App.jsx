@@ -11,10 +11,15 @@ const INSTAGRAM_URL =
 const createWhatsAppUrl = (text) =>
   `${BASE_WHATSAPP}?text=${encodeURIComponent(text)}`;
 
-// 👉 NAVBAR (desktop + celular) con enlace Carrito
+// 👉 NAVBAR (desktop + celular)
+// Logo a la izquierda, menú al centro y WhatsApp + Instagram arriba a la derecha
 function NavBar({ cartCount }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+
+  // ✨ estados para el hover neón
+  const [hoverWhats, setHoverWhats] = useState(false);
+  const [hoverInsta, setHoverInsta] = useState(false);
 
   const go = (path) => {
     navigate(path);
@@ -23,6 +28,7 @@ function NavBar({ cartCount }) {
 
   return (
     <header className="nav">
+      {/* Logo */}
       <div
         className="nav-brand"
         onClick={() => go("/")}
@@ -31,7 +37,7 @@ function NavBar({ cartCount }) {
         Re4lworld
       </div>
 
-      {/* Botón hamburguesa */}
+      {/* Botón hamburguesa (solo se ve en móvil por CSS) */}
       <button
         className="nav-toggle"
         onClick={() => setIsOpen((v) => !v)}
@@ -40,6 +46,7 @@ function NavBar({ cartCount }) {
         ☰
       </button>
 
+      {/* Links navegación */}
       <nav className={`nav-links ${isOpen ? "nav-links--open" : ""}`}>
         <button className="nav-link" onClick={() => go("/ropa")}>
           Ropa
@@ -61,18 +68,89 @@ function NavBar({ cartCount }) {
         </button>
       </nav>
 
-      <a
-        href={`${BASE_WHATSAPP}?text=Hola,%20vi%20la%20tienda%20Re4lworld%20y%20quiero%20hablar%20contigo`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="nav-cta"
-      >
-        💬 WhatsApp
-      </a>
+{/* 🔗 Botones de contacto arriba a la derecha (neón blanco MUY sutil) */}
+<div
+  style={{
+    display: "flex",
+    gap: "0.5rem",
+    alignItems: "center",
+  }}
+>
+  {/* WhatsApp */}
+  <a
+    href={`${BASE_WHATSAPP}?text=Hola,%20vi%20la%20tienda%20Re4lworld%20y%20quiero%20hablar%20contigo`}
+    target="_blank"
+    rel="noopener noreferrer"
+    onMouseEnter={() => setHoverWhats(true)}
+    onMouseLeave={() => setHoverWhats(false)}
+    style={{
+      width: "110px",
+      height: "36px",
+      borderRadius: "999px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      textDecoration: "none",
+      fontSize: "0.72rem",
+      letterSpacing: "0.08em",
+      textTransform: "uppercase",
+      cursor: "pointer",
+
+      /* 🎨 Color base */
+      background: "rgba(16,185,129,0.10)", // verde MUY sutil
+      border: hoverWhats
+        ? "1px solid rgba(16,185,129,0.9)" // verde intenso al hover
+        : "1px solid rgba(16,185,129,0.6)",
+      color: "rgba(209,250,229,0.9)", // verde muy suave
+
+      /* 🔥 efecto neón */
+      boxShadow: hoverWhats
+        ? "0 0 10px rgba(16,185,129,0.9)"
+        : "none",
+      transition: "all 0.3s ease",
+    }}
+  >
+    💬 WHATSAPP
+  </a>
+
+  {/* Instagram */}
+  <a
+    href={INSTAGRAM_URL}
+    target="_blank"
+    rel="noopener noreferrer"
+    onMouseEnter={() => setHoverInsta(true)}
+    onMouseLeave={() => setHoverInsta(false)}
+    style={{
+      width: "36px",
+      height: "36px",
+      borderRadius: "999px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      textDecoration: "none",
+      cursor: "pointer",
+
+      /* 🎨 Color base Instagram/rosado cálido */
+      background: "rgba(249,115,22,0.10)", // naranja sutil
+      border: hoverInsta
+        ? "1px solid rgba(249,115,22,0.9)" // borde intenso
+        : "1px solid rgba(249,115,22,0.6)",
+      color: "rgba(255,237,213,0.9)",
+
+      /* 🔥 efecto neón */
+      boxShadow: hoverInsta
+        ? "0 0 10px rgba(249,115,22,0.9)"
+        : "none",
+      transition: "all 0.3s ease",
+      fontSize: "1rem",
+    }}
+  >
+    📷
+  </a>
+</div>
     </header>
   );
 }
-
 // 🏠 HOME
 function HomePage() {
   const TITLE = "Re4lworld";
@@ -113,15 +191,16 @@ function HomePage() {
           {frases[fraseIndex]}
         </p>
         <div className="hero-buttons">
+          {/* Botones grandes del inicio: se quedan igual */}
           <a
             href={`${BASE_WHATSAPP}?text=Hola,%20vi%20la%20tienda%20Re4lworld%20y%20quiero%20hablar%20contigo`}
             target="_blank"
             className="btn btn-whatsapp"
           >
-            💬 WhatsApp
+            💬 WHATSAPP
           </a>
           <a href={INSTAGRAM_URL} target="_blank" className="btn btn-instagram">
-            📷 Instagram
+            📷 INSTAGRAM
           </a>
         </div>
       </div>
@@ -596,6 +675,7 @@ function RopaCard({ item, onAddToCart }) {
                 `${BASE_WHATSAPP}?text=Hola,%20me%20interesa%20la%20prenda%20${encodeURIComponent(
                   item.nombre
                 )}`,
+
                 "_blank"
               )
             }
@@ -1446,7 +1526,7 @@ function VapersPage() {
                 )
               }
             >
-              🔒 Apartar una unidad (próximamente) — $20.000
+              🔒 Apartar una unidad (próximamente) — $25.000
             </button>
           </article>
         ))}
@@ -1870,7 +1950,7 @@ function App() {
         />
       </Routes>
 
-      {/* 📍 BOTONES FLOTANTES DE CONTACTO + CARRITO */}
+      {/* 📍 BOTÓN FLOTANTE: SOLO CARRITO */}
       <div
         style={{
           position: "fixed",
@@ -1882,7 +1962,6 @@ function App() {
           zIndex: 9999,
         }}
       >
-        {/* 🛒 Carrito flotante */}
         <button
           onClick={() => navigate("/carrito")}
           className="btn btn-cart-floating"
@@ -1892,34 +1971,6 @@ function App() {
             <span className="cart-badge">{cart.length}</span>
           )}
         </button>
-
-        {/* WhatsApp */}
-        <a
-          href={`${BASE_WHATSAPP}?text=Hola,%20vi%20la%20tienda%20Re4lworld%20y%20quiero%20hablar%20contigo`}
-          target="_blank"
-          className="btn btn-whatsapp"
-          style={{
-            padding: "0.6rem 0.8rem",
-            fontSize: "0.75rem",
-            borderRadius: "999px",
-          }}
-        >
-          💬
-        </a>
-
-        {/* Instagram */}
-        <a
-          href={INSTAGRAM_URL}
-          target="_blank"
-          className="btn btn-instagram"
-          style={{
-            padding: "0.6rem 0.8rem",
-            fontSize: "0.75rem",
-            borderRadius: "999px",
-          }}
-        >
-          📷
-        </a>
       </div>
     </div>
   );
