@@ -225,7 +225,7 @@ const ropaItems = [
   },
 ];
 
-// 🧢 GORRAS (con vendido)
+// 🧢 GORRAS
 const gorrasItems = [
   {
     id: 1,
@@ -476,7 +476,7 @@ function RopaPage({ onAddToCart }) {
   );
 }
 
-// 🔁 Tarjeta Ropa (con hover y SOLD OUT)
+// 🔁 Tarjeta Ropa
 function RopaCard({ item, onAddToCart }) {
   const imagenes = Array.isArray(item.imagen) ? item.imagen : [item.imagen];
   const [index, setIndex] = useState(0);
@@ -606,8 +606,14 @@ function RopaCard({ item, onAddToCart }) {
           </button>
           <button
             onClick={onAddToCart}
-            className="btn btn-instagram"
-            style={{ flex: 1, minWidth: "140px" }}
+            className="btn"
+            style={{
+              flex: 1,
+              minWidth: "140px",
+              background: "#111827",
+              color: "#e5e7eb",
+              border: "1px solid #374151",
+            }}
           >
             ➕ Agregar al carrito
           </button>
@@ -617,7 +623,7 @@ function RopaCard({ item, onAddToCart }) {
   );
 }
 
-// 🔁 Tarjeta Gorra (hover + SOLD OUT)
+// 🔁 Tarjeta Gorra
 function GorraCard({ item, onAddToCart }) {
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
@@ -784,8 +790,14 @@ function GorraCard({ item, onAddToCart }) {
             💬 WhatsApp
           </button>
           <button
-            className="btn btn-instagram"
-            style={{ flex: 1, minWidth: "140px" }}
+            className="btn"
+            style={{
+              flex: 1,
+              minWidth: "140px",
+              background: "#111827",
+              color: "#e5e7eb",
+              border: "1px solid #374151",
+            }}
             onClick={onAddToCart}
           >
             ➕ Agregar al carrito
@@ -958,7 +970,7 @@ function ZapatosPage({ onAddToCart }) {
   );
 }
 
-// Tarjeta Zapato (hover + SOLD OUT)
+// Tarjeta Zapato
 function ZapatoCard({ item, onAddToCart }) {
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
@@ -1125,8 +1137,14 @@ function ZapatoCard({ item, onAddToCart }) {
             💬 WhatsApp
           </button>
           <button
-            className="btn btn-instagram"
-            style={{ flex: 1, minWidth: "140px" }}
+            className="btn"
+            style={{
+              flex: 1,
+              minWidth: "140px",
+              background: "#111827",
+              color: "#e5e7eb",
+              border: "1px solid #374151",
+            }}
             onClick={onAddToCart}
           >
             ➕ Agregar al carrito
@@ -1809,6 +1827,7 @@ function CarritoPage({ cart, onRemoveItem, onClear }) {
 // 🚀 APP PRINCIPAL
 function App() {
   const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
 
   const handleAddToCart = (producto) => {
     setCart((prev) => [...prev, producto]);
@@ -1851,7 +1870,7 @@ function App() {
         />
       </Routes>
 
-      {/* 📍 BOTONES FLOTANTES DE CONTACTO */}
+      {/* 📍 BOTONES FLOTANTES DE CONTACTO + CARRITO */}
       <div
         style={{
           position: "fixed",
@@ -1863,6 +1882,18 @@ function App() {
           zIndex: 9999,
         }}
       >
+        {/* 🛒 Carrito flotante */}
+        <button
+          onClick={() => navigate("/carrito")}
+          className="btn btn-cart-floating"
+        >
+          🛒
+          {cart.length > 0 && (
+            <span className="cart-badge">{cart.length}</span>
+          )}
+        </button>
+
+        {/* WhatsApp */}
         <a
           href={`${BASE_WHATSAPP}?text=Hola,%20vi%20la%20tienda%20Re4lworld%20y%20quiero%20hablar%20contigo`}
           target="_blank"
@@ -1875,6 +1906,8 @@ function App() {
         >
           💬
         </a>
+
+        {/* Instagram */}
         <a
           href={INSTAGRAM_URL}
           target="_blank"
