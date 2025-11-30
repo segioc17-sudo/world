@@ -234,6 +234,7 @@ const gorrasItems = [
     id: 4,
     nombre: "Chicago Bulls 97",
     precio: "$60.000",
+    vendido: true,
     imagenes: [
       "/img/Chicago_bulls_97_1.jpg",
       "/img/Chicago_bulls_97_2.jpg",
@@ -273,7 +274,7 @@ const gorrasItems = [
     id: 9,
     nombre: "New York Yankees azul rey",
     precio: "$70.000",
-    imagenes: ["/img/azul.jpg", "/img/azul1.jpg", "/img/azul2.jpg"],
+    imagenes: ["/img/azul2.jpg","/img/azul.jpg","/img/azul1.jpg"],
   },
   {
     id: 10,
@@ -306,6 +307,12 @@ const zapatosItems = [
     precio: "$---",
     imagenes: ["/img/j4.jpg"],
     vendido: true,
+  },
+    {
+    id: 2,
+    nombre: "campus",
+    precio: "$110.000",
+    imagenes: ["/img/campus.jpg", "/img/campus1.jpg"],
   },
   {
     id: 3,
