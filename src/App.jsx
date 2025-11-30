@@ -591,14 +591,15 @@ function RopaCard({ item, onAddToCart }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div
-        style={{
-          position: "relative",
-          borderRadius: "0.9rem",
-          overflow: "hidden",
-          height: "220px",
-        }}
-      >
+<div
+  className="img-container-producto"
+  style={{
+    position: "relative",
+    borderRadius: "0.9rem",
+    overflow: "hidden",
+    height: "220px", // 📌 mantiene el tamaño normal para PC
+  }}
+>
         <img
           src={imagenes[index]}
           alt={item.nombre}
@@ -750,15 +751,15 @@ function GorraCard({ item, onAddToCart }) {
         Street cap · Re4lworld
       </div>
 
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "220px",
-          borderRadius: "0.9rem",
-          overflow: "hidden",
-        }}
-      >
+<div
+  className="img-container-producto"
+  style={{
+    position: "relative",
+    borderRadius: "0.9rem",
+    overflow: "hidden",
+    height: "220px", // 📌 mantiene el tamaño normal para PC
+  }}
+>
         <img
           src={item.imagenes[index]}
           alt={item.nombre}
@@ -1097,15 +1098,15 @@ function ZapatoCard({ item, onAddToCart }) {
         Sneaker · Re4lworld
       </div>
 
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "230px",
-          borderRadius: "0.9rem",
-          overflow: "hidden",
-        }}
-      >
+<div
+  className="img-container-producto"
+  style={{
+    position: "relative",
+    borderRadius: "0.9rem",
+    overflow: "hidden",
+    height: "220px", // 📌 mantiene el tamaño normal para PC
+  }}
+>
         <img
           src={item.imagenes[index]}
           alt={item.nombre}
@@ -1274,13 +1275,15 @@ function StreetGalleryPage() {
         overflow: "hidden",
       }}
     >
-      <div
-        style={{
-          position: "relative",
-          width: "100vw",
-          height: "calc(100vh - 4.5rem)",
-        }}
-      >
+<div
+  className="img-container-producto"
+  style={{
+    position: "relative",
+    borderRadius: "0.9rem",
+    overflow: "hidden",
+    height: "220px", // 📌 mantiene el tamaño normal para PC
+  }}
+>
         {!isMessageSlide && (
           <>
             <img

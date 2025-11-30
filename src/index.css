@@ -615,7 +615,12 @@ body {
     transform: scale(1);
   }
 }
-
+/* 📱 Para pantallas pequeñas (celulares) */
+@media (max-width: 480px) {
+  .img-container-producto {
+    height: 300px !important; /* Puedes ajustar entre 280 - 320 */
+  }
+}
 @keyframes gallerySlideDown {
   from {
     opacity: 0;
