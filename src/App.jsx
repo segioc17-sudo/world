@@ -1276,12 +1276,10 @@ function StreetGalleryPage() {
       }}
     >
 <div
-  className="img-container-producto"
   style={{
     position: "relative",
-    borderRadius: "0.9rem",
-    overflow: "hidden",
-    height: "220px", // 📌 mantiene el tamaño normal para PC
+    width: "100vw",
+    height: "calc(100vh - 4.5rem)", // 🟢 Esto asegura la pantalla completa
   }}
 >
         {!isMessageSlide && (
@@ -1522,7 +1520,7 @@ function VapersPage() {
               onClick={() =>
                 window.open(
                   createWhatsAppUrl(
-                    `Hola, quiero apartar una unidad (cuando estén disponibles) de ${op.nombre}. Vi que la preventa es por tan solo $20.000 y que solo hay 10 unidades.`
+                    `Hola, quiero apartar una unidad de ${op.nombre}. Vi que la preventa es de $25.000.`
                   ),
                   "_blank",
                   "noopener,noreferrer"
@@ -1906,15 +1904,52 @@ function CarritoPage({ cart, onRemoveItem, onClear }) {
     </main>
   );
 }
-
 // 🚀 APP PRINCIPAL
 function App() {
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
 
-  const handleAddToCart = (producto) => {
-    setCart((prev) => [...prev, producto]);
-  };
+// 🛑 Evita agregar productos repetidos
+const handleAddToCart = (producto) => {
+  setCart((prev) => {
+    const yaExiste = prev.some((item) => item.nombre === producto.nombre);
+    if (yaExiste) {
+      // ❌ Reemplaza el alert por esto:
+      const alerta = document.createElement("div");
+      alerta.textContent = `⚠️ "${producto.nombre}" ya está en tu carrito (solo hay 1 unidad disponible).`;
+      alerta.style.position = "fixed";
+      alerta.style.top = "20px";
+      alerta.style.right = "20px";
+      alerta.style.padding = "12px 18px";
+      alerta.style.background = "rgba(239, 68, 68, 0.15)";
+      alerta.style.border = "1px solid rgba(239, 68, 68, 0.5)";
+      alerta.style.borderRadius = "12px";
+      alerta.style.color = "#fca5a5";
+      alerta.style.fontSize = "0.88rem";
+      alerta.style.backdropFilter = "blur(6px)";
+      alerta.style.boxShadow = "0 0 10px rgba(239, 68, 68, 0.4)";
+      alerta.style.zIndex = "999999";
+      alerta.style.opacity = "0";
+      alerta.style.transition = "opacity 0.4s ease";
+
+      document.body.appendChild(alerta);
+
+      // 🔥 efecto fade-in
+      requestAnimationFrame(() => {
+        alerta.style.opacity = "1";
+      });
+
+      // ⏳ se elimina solo después de 2.5s con fade-out
+      setTimeout(() => {
+        alerta.style.opacity = "0";
+        setTimeout(() => alerta.remove(), 400);
+      }, 1500);
+
+      return prev; // ❌ NO se agrega de nuevo
+    }
+    return [...prev, producto]; // ✔ Se agrega si no estaba
+  });
+};
 
   const handleRemoveItem = (index) => {
     setCart((prev) => prev.filter((_, i) => i !== index));
@@ -1927,18 +1962,9 @@ function App() {
       <NavBar cartCount={cart.length} />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/ropa"
-          element={<RopaPage onAddToCart={handleAddToCart} />}
-        />
-        <Route
-          path="/gorras"
-          element={<GorrasPage onAddToCart={handleAddToCart} />}
-        />
-        <Route
-          path="/zapatos"
-          element={<ZapatosPage onAddToCart={handleAddToCart} />}
-        />
+        <Route path="/ropa" element={<RopaPage onAddToCart={handleAddToCart} />} />
+        <Route path="/gorras" element={<GorrasPage onAddToCart={handleAddToCart} />} />
+        <Route path="/zapatos" element={<ZapatosPage onAddToCart={handleAddToCart} />} />
         <Route path="/gallery" element={<StreetGalleryPage />} />
         <Route path="/vapers" element={<VapersPage />} />
         <Route
@@ -1970,13 +1996,10 @@ function App() {
           className="btn btn-cart-floating"
         >
           🛒
-          {cart.length > 0 && (
-            <span className="cart-badge">{cart.length}</span>
-          )}
+          {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
         </button>
       </div>
     </div>
   );
 }
-
 export default App;

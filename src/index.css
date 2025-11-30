@@ -615,12 +615,14 @@ body {
     transform: scale(1);
   }
 }
+
 /* 📱 Para pantallas pequeñas (celulares) */
 @media (max-width: 480px) {
   .img-container-producto {
     height: 300px !important; /* Puedes ajustar entre 280 - 320 */
   }
 }
+
 @keyframes gallerySlideDown {
   from {
     opacity: 0;
@@ -630,4 +632,55 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* === ALERTA FLOTANTE GRAFFITI === */
+.alerta {
+  position: fixed;
+  top: 80px; /* un poco debajo de la navbar */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.7rem 1.4rem;
+  background: rgba(15, 23, 42, 0.95);
+  color: #f9fafb;
+  border-radius: 999px;
+  font-family: "Permanent Marker", cursive;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 1),
+    0 0 18px rgba(34, 197, 94, 0.65);
+  opacity: 1;
+  transition: opacity 0.4s ease-out;
+  z-index: 9999;
+}
+
+/* animación tipo “jump” */
+@keyframes alertaJump {
+  0% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  30% {
+    transform: translateX(-50%) translateY(-10px) scale(1.05);
+  }
+  60% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-4px) scale(1.02);
+  }
+}
+
+.alerta--jump {
+  animation: alertaJump 0.6s ease-out;
+}
+
+/* estilo aerosol / spray */
+.alerta--spray {
+  letter-spacing: 0.18em;
+  text-shadow:
+    0 0 6px #22c55e,
+    0 0 16px #22c55e;
+  filter: blur(0.2px);
 }
