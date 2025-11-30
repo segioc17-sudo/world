@@ -31,7 +31,7 @@ function NavBar({ cartCount }) {
         Re4lworld
       </div>
 
-      {/* Botón hamburguesa (estilo en CSS con .nav-toggle) */}
+      {/* Botón hamburguesa */}
       <button
         className="nav-toggle"
         onClick={() => setIsOpen((v) => !v)}
@@ -155,6 +155,29 @@ function parsePrecio(precioTexto) {
   return Number(limpio) || 0;
 }
 
+// 🔴 Badge SOLD OUT reutilizable
+function SoldBadge() {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: "8px",
+        right: "8px",
+        background: "#b91c1c",
+        color: "#ffffff",
+        padding: "4px 10px",
+        borderRadius: "4px",
+        fontSize: "0.7rem",
+        fontWeight: 700,
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+      }}
+    >
+      SOLD OUT
+    </div>
+  );
+}
+
 // 👕 ROPA
 const ropaItems = [
   {
@@ -163,6 +186,7 @@ const ropaItems = [
     descr: "Talla única.",
     precio: "$200.000",
     imagen: ["/img/INDIANS.jpg", "/img/INDIANS1.jpg"],
+    // vendido: true,
   },
   {
     id: 2,
@@ -274,7 +298,7 @@ const gorrasItems = [
     id: 9,
     nombre: "New York Yankees azul rey",
     precio: "$70.000",
-    imagenes: ["/img/azul2.jpg","/img/azul.jpg","/img/azul1.jpg"],
+    imagenes: ["/img/azul2.jpg", "/img/azul.jpg", "/img/azul1.jpg"],
   },
   {
     id: 10,
@@ -292,14 +316,14 @@ const gorrasItems = [
   },
 ];
 
-// 👟 ZAPATOS (3 productos, con vendido)
+// 👟 ZAPATOS
 const zapatosItems = [
   {
     id: 1,
     nombre: "Jordan 11",
     precio: "$---",
     imagenes: ["/img/j1.jpg"],
-    vendido: true, // NO se puede comprar
+    vendido: true,
   },
   {
     id: 2,
@@ -308,14 +332,15 @@ const zapatosItems = [
     imagenes: ["/img/j4.jpg"],
     vendido: true,
   },
-    {
-    id: 2,
-    nombre: "campus",
-    precio: "$110.000",
-    imagenes: ["/img/campus.jpg", "/img/campus1.jpg"],
-  },
   {
     id: 3,
+    nombre: "Campus",
+    precio: "$110.000",
+    imagenes: ["/img/campus.jpg", "/img/campus1.jpg"],
+    vendido: false,
+  },
+  {
+    id: 4,
     nombre: "Dunk Low",
     precio: "$---",
     imagenes: ["/img/duck.jpg"],
@@ -324,7 +349,7 @@ const zapatosItems = [
 ];
 
 //
-// 🔍 CARD GENÉRICA "BUSCO ESTO" (se muestra dentro del grid)
+// 🔍 CARD GENÉRICA "BUSCO ESTO"
 //
 function BuscoEstoCard({ mensaje, onClick }) {
   return (
@@ -364,17 +389,13 @@ function BuscoEstoCard({ mensaje, onClick }) {
 
       <button
         onClick={onClick}
+        className="btn btn-whatsapp"
         style={{
           marginTop: "0.8rem",
-          background: "linear-gradient(to right, #22c55e, #16a34a, #22c55e)",
-          border: "none",
-          color: "#f9fafb",
+          alignSelf: "flex-start",
+          fontSize: "0.85rem",
           padding: "0.45rem 0.9rem",
           borderRadius: "999px",
-          fontSize: "0.85rem",
-          cursor: "pointer",
-          boxShadow: "0 6px 18px rgba(0,0,0,0.7)",
-          alignSelf: "flex-start",
         }}
       >
         🔍 Busco algo diferente
@@ -430,7 +451,8 @@ function RopaPage({ onAddToCart }) {
           <RopaCard
             key={item.id}
             item={item}
-            onAddToCart={() =>
+            onAddToCart={() => {
+              if (item.vendido) return;
               onAddToCart({
                 nombre: item.nombre,
                 precioTexto: item.precio,
@@ -439,12 +461,11 @@ function RopaPage({ onAddToCart }) {
                 imagen: Array.isArray(item.imagen)
                   ? item.imagen[0]
                   : item.imagen,
-              })
-            }
+              });
+            }}
           />
         ))}
 
-        {/* Card integrada de búsqueda */}
         <BuscoEstoCard
           key="busco-ropa"
           mensaje="¿No encontraste la prenda que querías?"
@@ -455,30 +476,47 @@ function RopaPage({ onAddToCart }) {
   );
 }
 
-// 🔁 Tarjeta Ropa
+// 🔁 Tarjeta Ropa (con hover y SOLD OUT)
 function RopaCard({ item, onAddToCart }) {
   const imagenes = Array.isArray(item.imagen) ? item.imagen : [item.imagen];
   const [index, setIndex] = useState(0);
+  const [hovered, setHovered] = useState(false);
   const total = imagenes.length;
+  const esVendido = item.vendido === true;
 
   const next = () => setIndex((prev) => (prev + 1) % total);
   const prev = () => setIndex((prev) => (prev - 1 + total) % total);
 
+  const cardHoverStyle = {
+    ...cardStyle,
+    padding: "1rem",
+    textAlign: "left",
+    background: "rgba(0,0,0,0.85)",
+    backdropFilter: "blur(10px)",
+    transform: hovered ? "translateY(-6px) scale(1.02)" : "translateY(0) scale(1)",
+    boxShadow: hovered
+      ? "0px 12px 28px rgba(0,0,0,0.8)"
+      : "0px 5px 15px rgba(0,0,0,0.4)",
+    transition: "all 0.25s ease-out",
+    ...(esVendido && {
+      transform: hovered
+        ? "translateY(-3px) scale(1.01)"
+        : "translateY(0) scale(1)",
+      boxShadow: "0px 5px 15px rgba(185,28,28,0.25)",
+    }),
+  };
+
   return (
     <article
-      style={{
-        ...cardStyle,
-        padding: "1rem",
-        textAlign: "left",
-        background: "rgba(0,0,0,0.8)",
-        backdropFilter: "blur(10px)",
-      }}
+      style={cardHoverStyle}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       <div
         style={{
+          position: "relative",
           borderRadius: "0.9rem",
           overflow: "hidden",
-          position: "relative",
           height: "220px",
         }}
       >
@@ -488,40 +526,30 @@ function RopaCard({ item, onAddToCart }) {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
 
+        {esVendido && <SoldBadge />}
+
         {total > 1 && (
           <>
             <button
               onClick={prev}
+              className="gallery-arrow"
               style={{
                 position: "absolute",
                 left: "8px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                background: "rgba(0,0,0,0.5)",
-                border: "none",
-                color: "#fff",
-                borderRadius: "999px",
-                width: "26px",
-                height: "26px",
-                cursor: "pointer",
               }}
             >
               ‹
             </button>
             <button
               onClick={next}
+              className="gallery-arrow"
               style={{
                 position: "absolute",
                 right: "8px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                background: "rgba(0,0,0,0.5)",
-                border: "none",
-                color: "#fff",
-                borderRadius: "999px",
-                width: "26px",
-                height: "26px",
-                cursor: "pointer",
               }}
             >
               ›
@@ -542,41 +570,54 @@ function RopaCard({ item, onAddToCart }) {
         {item.precio}
       </p>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "0.5rem",
-          marginTop: "0.8rem",
-          flexWrap: "wrap",
-        }}
-      >
-        <button
-          onClick={() =>
-            window.open(
-              `${BASE_WHATSAPP}?text=Hola,%20me%20interesa%20la%20prenda%20${encodeURIComponent(
-                item.nombre
-              )}`,
-              "_blank"
-            )
-          }
-          className="btn btn-whatsapp"
-          style={{ flex: 1, minWidth: "140px" }}
+      {esVendido ? (
+        <p
+          style={{
+            marginTop: "0.8rem",
+            fontSize: "0.85rem",
+            color: "#9ca3af",
+          }}
         >
-          💬 WhatsApp
-        </button>
-        <button
-          onClick={onAddToCart}
-          className="btn btn-instagram"
-          style={{ flex: 1, minWidth: "140px" }}
+          Esta prenda ya fue vendida. Si quieres algo similar, escríbeme por
+          WhatsApp desde el inicio de la página. 💬
+        </p>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5rem",
+            marginTop: "0.8rem",
+            flexWrap: "wrap",
+          }}
         >
-          ➕ Agregar al carrito
-        </button>
-      </div>
+          <button
+            onClick={() =>
+              window.open(
+                `${BASE_WHATSAPP}?text=Hola,%20me%20interesa%20la%20prenda%20${encodeURIComponent(
+                  item.nombre
+                )}`,
+                "_blank"
+              )
+            }
+            className="btn btn-whatsapp"
+            style={{ flex: 1, minWidth: "140px" }}
+          >
+            💬 WhatsApp
+          </button>
+          <button
+            onClick={onAddToCart}
+            className="btn btn-instagram"
+            style={{ flex: 1, minWidth: "140px" }}
+          >
+            ➕ Agregar al carrito
+          </button>
+        </div>
+      )}
     </article>
   );
 }
 
-// 🔁 Tarjeta Gorra
+// 🔁 Tarjeta Gorra (hover + SOLD OUT)
 function GorraCard({ item, onAddToCart }) {
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
@@ -590,18 +631,19 @@ function GorraCard({ item, onAddToCart }) {
     ...cardStyle,
     padding: "1rem",
     textAlign: "left",
-    background: "rgba(15,23,42,0.88)",
+    background: "rgba(15,23,42,0.9)",
     backdropFilter: "blur(14px)",
-    border: hovered
-      ? "1px solid rgba(251,191,36,0.9)"
-      : "1px solid rgba(15,23,42,0.9)",
-    boxShadow: hovered
-      ? "0 18px 40px rgba(0,0,0,0.85)"
-      : "0 10px 28px rgba(0,0,0,0.7)",
     transform: hovered ? "translateY(-6px) scale(1.02)" : "translateY(0) scale(1)",
-    transition: "all 0.2s ease-out",
-    opacity: esVendido ? 0.7 : 1,
-    filter: esVendido ? "grayscale(0.4)" : "none",
+    boxShadow: hovered
+      ? "0px 15px 30px rgba(0,0,0,0.85)"
+      : "0px 8px 20px rgba(0,0,0,0.6)",
+    transition: "all 0.25s ease-out",
+    ...(esVendido && {
+      transform: hovered
+        ? "translateY(-3px) scale(1.01)"
+        : "translateY(0) scale(1)",
+      boxShadow: "0px 4px 12px rgba(185,28,28,0.25)",
+    }),
   };
 
   return (
@@ -637,61 +679,30 @@ function GorraCard({ item, onAddToCart }) {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
 
-        {esVendido && (
-          <div
-            style={{
-              position: "absolute",
-              top: "8px",
-              left: "8px",
-              background: "rgba(239,68,68,0.9)",
-              color: "#f9fafb",
-              padding: "4px 10px",
-              borderRadius: "999px",
-              fontSize: "0.7rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.12em",
-            }}
-          >
-            Vendido
-          </div>
-        )}
+        {esVendido && <SoldBadge />}
 
         {total > 1 && (
           <>
             <button
               onClick={prev}
+              className="gallery-arrow"
               style={{
                 position: "absolute",
                 left: "8px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                background: "rgba(0,0,0,0.55)",
-                border: "none",
-                color: "#fff",
-                borderRadius: "999px",
-                width: "26px",
-                height: "26px",
-                cursor: "pointer",
-                fontSize: "0.9rem",
               }}
             >
               ‹
             </button>
             <button
               onClick={next}
+              className="gallery-arrow"
               style={{
                 position: "absolute",
                 right: "8px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                background: "rgba(0,0,0,0.55)",
-                border: "none",
-                color: "#fff",
-                borderRadius: "999px",
-                width: "26px",
-                height: "26px",
-                cursor: "pointer",
-                fontSize: "0.9rem",
               }}
             >
               ›
@@ -738,36 +749,49 @@ function GorraCard({ item, onAddToCart }) {
         {item.precio}
       </p>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "0.5rem",
-          marginTop: "0.8rem",
-          flexWrap: "wrap",
-        }}
-      >
-        <button
-          className="btn btn-whatsapp"
-          style={{ flex: 1, minWidth: "140px" }}
-          onClick={() =>
-            window.open(
-              `${BASE_WHATSAPP}?text=Hola,%20me%20interesa%20la%20gorra%20${encodeURIComponent(
-                item.nombre
-              )}`,
-              "_blank"
-            )
-          }
+      {esVendido ? (
+        <p
+          style={{
+            marginTop: "0.8rem",
+            fontSize: "0.85rem",
+            color: "#9ca3af",
+          }}
         >
-          💬 WhatsApp
-        </button>
-        <button
-          className="btn btn-instagram"
-          style={{ flex: 1, minWidth: "140px" }}
-          onClick={onAddToCart}
+          Esta gorra ya fue vendida. Si quieres algo similar, escríbeme por
+          WhatsApp desde el inicio de la página. 💬
+        </p>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5rem",
+            marginTop: "0.8rem",
+            flexWrap: "wrap",
+          }}
         >
-          ➕ Agregar al carrito
-        </button>
-      </div>
+          <button
+            className="btn btn-whatsapp"
+            style={{ flex: 1, minWidth: "140px" }}
+            onClick={() =>
+              window.open(
+                `${BASE_WHATSAPP}?text=Hola,%20me%20interesa%20la%20gorra%20${encodeURIComponent(
+                  item.nombre
+                )}`,
+                "_blank"
+              )
+            }
+          >
+            💬 WhatsApp
+          </button>
+          <button
+            className="btn btn-instagram"
+            style={{ flex: 1, minWidth: "140px" }}
+            onClick={onAddToCart}
+          >
+            ➕ Agregar al carrito
+          </button>
+        </div>
+      )}
     </article>
   );
 }
@@ -830,15 +854,16 @@ function GorrasPage({ onAddToCart }) {
           <GorraCard
             key={item.id}
             item={item}
-            onAddToCart={() =>
+            onAddToCart={() => {
+              if (item.vendido) return;
               onAddToCart({
                 nombre: item.nombre,
                 precioTexto: item.precio,
                 precioNumero: parsePrecio(item.precio),
                 categoria: "Gorra",
                 imagen: item.imagenes[0],
-              })
-            }
+              });
+            }}
           />
         ))}
 
@@ -903,7 +928,6 @@ function ZapatosPage({ onAddToCart }) {
           gap: "1.6rem",
           gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
           width: "100%",
-
           maxWidth: "900px",
         }}
       >
@@ -911,15 +935,16 @@ function ZapatosPage({ onAddToCart }) {
           <ZapatoCard
             key={item.id}
             item={item}
-            onAddToCart={() =>
+            onAddToCart={() => {
+              if (item.vendido) return;
               onAddToCart({
                 nombre: item.nombre,
                 precioTexto: item.precio,
                 precioNumero: parsePrecio(item.precio),
                 categoria: "Zapato",
                 imagen: item.imagenes[0],
-              })
-            }
+              });
+            }}
           />
         ))}
 
@@ -933,9 +958,10 @@ function ZapatosPage({ onAddToCart }) {
   );
 }
 
-// Tarjeta Zapato
+// Tarjeta Zapato (hover + SOLD OUT)
 function ZapatoCard({ item, onAddToCart }) {
   const [index, setIndex] = useState(0);
+  const [hovered, setHovered] = useState(false);
   const total = item.imagenes.length;
   const esVendido = item.vendido === true;
 
@@ -946,15 +972,27 @@ function ZapatoCard({ item, onAddToCart }) {
     ...cardStyle,
     padding: "1rem",
     textAlign: "left",
-    background: "rgba(0,0,0,0.85)",
+    background: "rgba(0,0,0,0.9)",
     backdropFilter: "blur(12px)",
-    opacity: esVendido ? 0.7 : 1,
-    filter: esVendido ? "grayscale(0.4)" : "none",
-    transition: "all 0.2s ease-out",
+    transform: hovered ? "translateY(-6px) scale(1.02)" : "translateY(0) scale(1)",
+    boxShadow: hovered
+      ? "0px 15px 30px rgba(0,0,0,0.85)"
+      : "0px 8px 20px rgba(0,0,0,0.6)",
+    transition: "all 0.25s ease-out",
+    ...(esVendido && {
+      transform: hovered
+        ? "translateY(-3px) scale(1.01)"
+        : "translateY(0) scale(1)",
+      boxShadow: "0px 4px 12px rgba(185,28,28,0.25)",
+    }),
   };
 
   return (
-    <article style={cardStyleZapato}>
+    <article
+      style={cardStyleZapato}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <div
         style={{
           fontSize: "0.7rem",
@@ -982,61 +1020,30 @@ function ZapatoCard({ item, onAddToCart }) {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
 
-        {esVendido && (
-          <div
-            style={{
-              position: "absolute",
-              top: "8px",
-              left: "8px",
-              background: "rgba(239,68,68,0.9)",
-              color: "#f9fafb",
-              padding: "4px 10px",
-              borderRadius: "999px",
-              fontSize: "0.7rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.12em",
-            }}
-          >
-            Vendido
-          </div>
-        )}
+        {esVendido && <SoldBadge />}
 
         {total > 1 && (
           <>
             <button
               onClick={prev}
+              className="gallery-arrow"
               style={{
                 position: "absolute",
                 left: "8px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                background: "rgba(0,0,0,0.55)",
-                border: "none",
-                color: "#fff",
-                borderRadius: "999px",
-                width: "26px",
-                height: "26px",
-                cursor: "pointer",
-                fontSize: "0.9rem",
               }}
             >
               ‹
             </button>
             <button
               onClick={next}
+              className="gallery-arrow"
               style={{
                 position: "absolute",
                 right: "8px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                background: "rgba(0,0,0,0.55)",
-                border: "none",
-                color: "#fff",
-                borderRadius: "999px",
-                width: "26px",
-                height: "26px",
-                cursor: "pointer",
-                fontSize: "0.9rem",
               }}
             >
               ›
@@ -1130,12 +1137,11 @@ function ZapatoCard({ item, onAddToCart }) {
   );
 }
 
-// 📸 STREET GALLERY – fullscreen con slide final de mensaje grande
+// 📸 STREET GALLERY – fullscreen
 function StreetGalleryPage() {
-  // ⚠ Cambia estos nombres por tus fotos reales
   const fotos = ["/img/ejemplo2.jpg"];
 
-  const [index, setIndex] = useState(0); // ahora recorre fotos + slide de texto
+  const [index, setIndex] = useState(0);
   const [animation, setAnimation] = useState("fade");
   const totalSlides = fotos.length + 1; // último slide = mensaje
 
@@ -1147,7 +1153,6 @@ function StreetGalleryPage() {
     return random || "fade";
   };
 
-  // Cambio automático (incluye la slide de texto)
   useEffect(() => {
     if (totalSlides <= 1) return;
 
@@ -1165,7 +1170,7 @@ function StreetGalleryPage() {
     <main
       style={{
         minHeight: "100vh",
-        paddingTop: "4.5rem", // espacio por el navbar
+        paddingTop: "4.5rem",
         backgroundColor: "#020617",
         color: "#f9fafb",
         overflow: "hidden",
@@ -1178,7 +1183,6 @@ function StreetGalleryPage() {
           height: "calc(100vh - 4.5rem)",
         }}
       >
-        {/* Slides de foto */}
         {!isMessageSlide && (
           <>
             <img
@@ -1199,7 +1203,6 @@ function StreetGalleryPage() {
           </>
         )}
 
-        {/* Slide final: mensaje gigante en el centro */}
         {isMessageSlide && (
           <div
             style={{
@@ -1395,7 +1398,6 @@ function VapersPage() {
               {op.estado}
             </p>
 
-            {/* ✅ Mensaje de unidades limitadas */}
             <p
               style={{
                 marginTop: "0.4rem",
@@ -1407,7 +1409,6 @@ function VapersPage() {
               Solo habrá 10 unidades por referencia. 🚨
             </p>
 
-            {/* ✅ Botón para apartar unidad (próximamente) */}
             <button
               className="btn btn-whatsapp"
               style={{
@@ -1436,7 +1437,7 @@ function VapersPage() {
   );
 }
 
-// 🛒 CARRITO – Sección (mejorado con mini foto + barra de progreso combos)
+// 🛒 CARRITO – Sección
 function CarritoPage({ cart, onRemoveItem, onClear }) {
   const cantidad = cart.length;
   const subtotal = cart.reduce(
@@ -1444,7 +1445,6 @@ function CarritoPage({ cart, onRemoveItem, onClear }) {
     0
   );
 
-  // 🧮 Reglas de descuento (mismo comportamiento que antes)
   let descuento = 0;
   if (cantidad === 2) descuento = 10000;
   else if (cantidad >= 3) descuento = 15000;
@@ -1455,7 +1455,6 @@ function CarritoPage({ cart, onRemoveItem, onClear }) {
   const formato = (n) =>
     "$" + n.toLocaleString("es-CO", { minimumFractionDigits: 0 });
 
-  // 📝 Mensaje para WhatsApp (texto normal, se encodea al final)
   const crearMensajeWhatsApp = () => {
     if (cantidad === 0) {
       return "Hola, vi la tienda Re4lworld y quiero conocer los productos.";
@@ -1509,7 +1508,7 @@ function CarritoPage({ cart, onRemoveItem, onClear }) {
             carrito.
           </p>
 
-          {/* Lista de productos del carrito */}
+          {/* Lista de productos */}
           <section
             style={{
               width: "100%",
@@ -1533,7 +1532,6 @@ function CarritoPage({ cart, onRemoveItem, onClear }) {
                   background: "rgba(15,23,42,0.95)",
                 }}
               >
-                {/* Mini imagen del producto si existe */}
                 {item.imagen && (
                   <img
                     src={item.imagen}
@@ -1664,7 +1662,7 @@ function CarritoPage({ cart, onRemoveItem, onClear }) {
                 </div>
               </div>
 
-              {/* Bloque: info de combos + barra de progreso */}
+              {/* Info combos */}
               <div
                 style={{
                   flex: 1,
@@ -1707,8 +1705,7 @@ function CarritoPage({ cart, onRemoveItem, onClear }) {
                     }}
                   >
                     • Llevando <strong>2 productos</strong> tienes{" "}
-                    <strong>-$10.000</strong>{" "}
-                    {combo2Activo && <span>✅</span>}
+                    <strong>-$10.000</strong> {combo2Activo && <span>✅</span>}
                   </div>
                   <div
                     style={{
@@ -1724,12 +1721,10 @@ function CarritoPage({ cart, onRemoveItem, onClear }) {
                     }}
                   >
                     • Llevando <strong>3 o más productos</strong> tienes{" "}
-                    <strong>-$15.000</strong>{" "}
-                    {combo3Activo && <span>🔥</span>}
+                    <strong>-$15.000</strong> {combo3Activo && <span>🔥</span>}
                   </div>
                 </div>
 
-                {/* Barra de progreso hacia los combos */}
                 {!combo3Activo && (
                   <div style={{ marginTop: "0.6rem" }}>
                     <div
@@ -1856,7 +1851,7 @@ function App() {
         />
       </Routes>
 
-      {/* 📍 BOTONES FLOTANTES DE CONTACTO (sin botón de música) */}
+      {/* 📍 BOTONES FLOTANTES DE CONTACTO */}
       <div
         style={{
           position: "fixed",

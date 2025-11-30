@@ -55,10 +55,18 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   cursor: pointer;
+  transition:
+    color 0.18s ease-out,
+    transform 0.18s ease-out,
+    text-shadow 0.18s ease-out;
 }
 
 .nav-link:hover {
-  color: #f97316;
+  color: #fbbf24;
+  transform: translateY(-2px);
+  text-shadow:
+    0 0 6px rgba(251, 191, 36, 0.8),
+    0 0 18px rgba(59, 130, 246, 0.45);
 }
 
 .nav-cta {
@@ -67,9 +75,24 @@ body {
   letter-spacing: 0.12em;
   padding: 0.5rem 1.2rem;
   border-radius: 999px;
-  border: 1px solid #f97316;
-  color: #fed7aa;
+  border: 1px solid #22c55e;
+  color: #bbf7d0;
   text-decoration: none;
+  background: rgba(6, 95, 70, 0.2);
+  transition:
+    transform 0.18s ease-out,
+    box-shadow 0.18s ease-out,
+    background 0.2s ease-out,
+    color 0.2s ease-out,
+    border-color 0.2s ease-out;
+}
+
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.85);
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-color: transparent;
+  color: #f9fafb;
 }
 
 /* botón hamburguesa – se ve solo en móvil (lo activamos en el media query) */
@@ -248,6 +271,7 @@ body {
   justify-content: center;
 }
 
+/* BOTONES GENERALES – versión neón */
 .btn {
   padding: 0.85rem 1.6rem;
   border-radius: 999px;
@@ -256,26 +280,74 @@ body {
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  transition:
+    transform 0.18s ease-out,
+    box-shadow 0.18s ease-out,
+    background 0.2s ease-out,
+    filter 0.18s ease-out,
+    border-color 0.18s ease-out,
+    color 0.18s ease-out;
 }
 
+/* Hover general tipo neón */
+.btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.55);
+  filter: brightness(1.07);
+}
+
+/* WhatsApp: verde neón */
 .btn-whatsapp {
-  background: #22c55e;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
   color: #052e16;
 }
 
 .btn-whatsapp:hover {
-  filter: brightness(1.06);
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.9);
+  background: linear-gradient(135deg, #4ade80, #16a34a);
+  color: #022c22;
 }
 
+/* Instagram: degradado tipo graffiti */
 .btn-instagram {
-  background: transparent;
-  border: 1px solid #e5e7eb;
+  background: radial-gradient(circle at 0 0, #f97316, #ec4899, #6366f1);
+  border: none;
   color: #f9fafb;
 }
 
 .btn-instagram:hover {
-  border-color: #f97316;
-  color: #fed7aa;
+  box-shadow: 0 0 18px rgba(236, 72, 153, 0.9);
+  background: radial-gradient(circle at 0 0, #fb923c, #f472b6, #818cf8);
+}
+
+/* Flechas de los sliders (gorras/zapatos/ropa) */
+.gallery-arrow {
+  background: rgba(0, 0, 0, 0.55);
+  border: none;
+  color: #ffffff;
+  border-radius: 999px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.18s ease-out,
+    transform 0.18s ease-out,
+    box-shadow 0.18s ease-out;
+}
+
+.gallery-arrow:hover {
+  background: rgba(15, 118, 110, 0.9);
+  transform: scale(1.08);
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.7);
 }
 
 /* ⭐ OPCIONAL: logo en esquina home
@@ -335,6 +407,8 @@ body {
     flex-direction: column;
   }
 }
+
+/* STREET GALLERY */
 .street-gallery-img {
   position: absolute;
   inset: 0;
@@ -360,23 +434,59 @@ body {
   animation: galleryZoom 0.9s ease-out;
 }
 
+.street-gallery-img--slide-down {
+  animation: gallerySlideDown 0.9s ease-out;
+}
+
 @keyframes galleryFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes gallerySlideLeft {
-  from { opacity: 0; transform: translateX(12%); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(12%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes gallerySlideRight {
-  from { opacity: 0; transform: translateX(-12%); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-12%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes galleryZoom {
-  from { opacity: 0; transform: scale(1.08); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
+@keyframes gallerySlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
