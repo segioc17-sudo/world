@@ -259,6 +259,14 @@ function SoldBadge() {
 
 // 👕 ROPA
 const ropaItems = [
+   {
+    id: 1,
+    nombre: "philipp plein",
+    descr: "Talla L.",
+    precio: "$70.000",
+    imagen: ["/img/philipp.jpg", "/img/philipp1.jpg"],
+    // vendido: true,
+  },
   {
     id: 1,
     nombre: "Indians",
